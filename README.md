@@ -1,4 +1,4 @@
-# ReelRemix - AI-Powered Video Clip Generation Platform
+# ReelRemix - AI-Powered Video Clip Generation Platform 
 
 Transform your long-form videos into viral short-form content with the power of AI. ReelRemix automatically identifies the most engaging moments in your videos and creates optimized clips for TikTok, Instagram Reels, and YouTube Shorts.
 
