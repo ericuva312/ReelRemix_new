@@ -1,0 +1,32 @@
+{
+  "name": "reelremix",
+  "version": "1.0.0",
+  "description": "AI-powered video clipping platform for content creators",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "clean": "turbo run clean",
+    "db:generate": "cd apps/web && npx prisma generate",
+    "db:push": "cd apps/web && npx prisma db push",
+    "db:migrate": "cd apps/web && npx prisma migrate dev",
+    "db:studio": "cd apps/web && npx prisma studio"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
+  "author": "ReelRemix",
+  "license": "MIT"
+}

@@ -1,0 +1,114 @@
+{
+  "timestamp": "2025-09-30T10:34:18.025Z",
+  "environment": "development",
+  "summary": {
+    "totalChecks": 15,
+    "passed": 15,
+    "failed": 0,
+    "errors": 17,
+    "warnings": 5
+  },
+  "checks": [
+    {
+      "name": "Environment variable OPENAI_API_KEY",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "name": "Optional environment variable SENTRY_DSN",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "name": "Directory apps/web/dist",
+      "status": "PASS",
+      "details": "created"
+    },
+    {
+      "name": "Directory apps/worker/dist",
+      "status": "PASS",
+      "details": "created"
+    },
+    {
+      "name": "Directory uploads",
+      "status": "PASS",
+      "details": "created"
+    },
+    {
+      "name": "Directory temp",
+      "status": "PASS",
+      "details": "created"
+    },
+    {
+      "name": "Directory logs",
+      "status": "PASS",
+      "details": "created"
+    },
+    {
+      "name": "File system write permissions",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "name": "Package file package.json",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "name": "Dependencies installed for package.json",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "name": "Package file apps/web/package.json",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "name": "Dependencies installed for apps/web/package.json",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "name": "Package file apps/worker/package.json",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "name": "Dependencies installed for apps/worker/package.json",
+      "status": "PASS",
+      "details": ""
+    },
+    {
+      "name": "Package file apps/python/requirements.txt",
+      "status": "PASS",
+      "details": ""
+    }
+  ],
+  "errors": [
+    "Missing required environment variable: DATABASE_URL (PostgreSQL connection string)",
+    "Missing required environment variable: REDIS_URL (Redis connection string)",
+    "Missing required environment variable: JWT_SECRET (JWT signing secret (min 32 chars))",
+    "Missing required environment variable: JWT_EXPIRES_IN (JWT expiration time)",
+    "Missing required environment variable: STRIPE_SECRET_KEY (Stripe secret key)",
+    "Missing required environment variable: STRIPE_PUBLISHABLE_KEY (Stripe publishable key)",
+    "Missing required environment variable: STRIPE_WEBHOOK_SECRET (Stripe webhook secret)",
+    "Missing required environment variable: AWS_ACCESS_KEY_ID (AWS access key)",
+    "Missing required environment variable: AWS_SECRET_ACCESS_KEY (AWS secret key)",
+    "Missing required environment variable: AWS_REGION (AWS region)",
+    "Missing required environment variable: S3_BUCKET (S3 bucket name)",
+    "Missing required environment variable: NODE_ENV (Environment (development/staging/production))",
+    "Missing required environment variable: FRONTEND_URL (Frontend application URL)",
+    "Missing required environment variable: API_URL (Backend API URL)",
+    "Database connection failed: Cannot find module '@prisma/client'\nRequire stack:\n- /home/ubuntu/reelremix/scripts/validate-config.js",
+    "Redis connection failed: Cannot find module 'redis'\nRequire stack:\n- /home/ubuntu/reelremix/scripts/validate-config.js",
+    "OpenAI API validation failed: Request failed with status code 401"
+  ],
+  "warnings": [
+    "Optional environment variable not set: DATADOG_API_KEY (DataDog API key)",
+    "Optional environment variable not set: SENDGRID_API_KEY (SendGrid email API key)",
+    "Optional environment variable not set: GOOGLE_ANALYTICS_ID (Google Analytics tracking ID)",
+    "Build file missing: apps/web/dist/index.html",
+    "Build file missing: apps/worker/dist/index.js"
+  ]
+}

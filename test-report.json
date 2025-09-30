@@ -1,0 +1,457 @@
+{
+  "issues": [
+    "HomePage.jsx - Button functionality: Only 1/4 buttons have onClick handlers",
+    "ProjectPage.jsx - Button functionality: Only 6/13 buttons have onClick handlers",
+    "LandingPage.jsx - Button functionality: Only 0/5 buttons have onClick handlers",
+    "StatsSection.jsx - Event handlers: No event handlers found",
+    "Footer.jsx - State management: Missing state management hooks",
+    "Footer.jsx - Event handlers: No event handlers found",
+    "stripe.ts - Express integration: Missing Express route definitions",
+    "billing.ts - Express integration: Missing Express route definitions",
+    "analytics.ts - Express integration: Missing Express route definitions"
+  ],
+  "passed": 64,
+  "failed": 9,
+  "frontend": [
+    {
+      "test": "HomePage.jsx - React imports",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.523Z"
+    },
+    {
+      "test": "HomePage.jsx - Button functionality",
+      "status": "FAIL",
+      "details": "Only 1/4 buttons have onClick handlers",
+      "timestamp": "2025-09-30T15:42:54.523Z"
+    },
+    {
+      "test": "PricingPage.jsx - React imports",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.524Z"
+    },
+    {
+      "test": "PricingPage.jsx - Button functionality",
+      "status": "PASS",
+      "details": "2/4 buttons have onClick handlers",
+      "timestamp": "2025-09-30T15:42:54.524Z"
+    },
+    {
+      "test": "DashboardPage.jsx - React imports",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.524Z"
+    },
+    {
+      "test": "DashboardPage.jsx - Button functionality",
+      "status": "PASS",
+      "details": "4/6 buttons have onClick handlers",
+      "timestamp": "2025-09-30T15:42:54.524Z"
+    },
+    {
+      "test": "AuthPage.jsx - React imports",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.524Z"
+    },
+    {
+      "test": "AuthPage.jsx - Button functionality",
+      "status": "PASS",
+      "details": "7/9 buttons have onClick handlers",
+      "timestamp": "2025-09-30T15:42:54.525Z"
+    },
+    {
+      "test": "AuthPage.jsx - Form submission",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.525Z"
+    },
+    {
+      "test": "ProjectPage.jsx - React imports",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.525Z"
+    },
+    {
+      "test": "ProjectPage.jsx - Button functionality",
+      "status": "FAIL",
+      "details": "Only 6/13 buttons have onClick handlers",
+      "timestamp": "2025-09-30T15:42:54.525Z"
+    },
+    {
+      "test": "LandingPage.jsx - React imports",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.525Z"
+    },
+    {
+      "test": "LandingPage.jsx - Button functionality",
+      "status": "FAIL",
+      "details": "Only 0/5 buttons have onClick handlers",
+      "timestamp": "2025-09-30T15:42:54.525Z"
+    },
+    {
+      "test": "AboutPage.jsx - React imports",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.525Z"
+    },
+    {
+      "test": "AboutPage.jsx - Button functionality",
+      "status": "PASS",
+      "details": "4/6 buttons have onClick handlers",
+      "timestamp": "2025-09-30T15:42:54.525Z"
+    },
+    {
+      "test": "ContactPage.jsx - React imports",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.525Z"
+    },
+    {
+      "test": "ContactPage.jsx - Button functionality",
+      "status": "PASS",
+      "details": "2/3 buttons have onClick handlers",
+      "timestamp": "2025-09-30T15:42:54.526Z"
+    },
+    {
+      "test": "button.jsx - Exports",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.526Z"
+    },
+    {
+      "test": "button.jsx - Styling utilities",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.526Z"
+    },
+    {
+      "test": "card.jsx - Exports",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.526Z"
+    },
+    {
+      "test": "card.jsx - Styling utilities",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.526Z"
+    },
+    {
+      "test": "input.jsx - Exports",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.526Z"
+    },
+    {
+      "test": "input.jsx - Styling utilities",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.526Z"
+    },
+    {
+      "test": "form.jsx - Exports",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.526Z"
+    },
+    {
+      "test": "form.jsx - Styling utilities",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.526Z"
+    },
+    {
+      "test": "badge.jsx - Exports",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.526Z"
+    },
+    {
+      "test": "badge.jsx - Styling utilities",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.526Z"
+    },
+    {
+      "test": "progress.jsx - Exports",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.526Z"
+    },
+    {
+      "test": "progress.jsx - Styling utilities",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.526Z"
+    },
+    {
+      "test": "tabs.jsx - Exports",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.526Z"
+    },
+    {
+      "test": "tabs.jsx - Styling utilities",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.526Z"
+    },
+    {
+      "test": "checkbox.jsx - Exports",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.526Z"
+    },
+    {
+      "test": "checkbox.jsx - Styling utilities",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.526Z"
+    },
+    {
+      "test": "label.jsx - Exports",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.526Z"
+    },
+    {
+      "test": "label.jsx - Styling utilities",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.526Z"
+    },
+    {
+      "test": "separator.jsx - Exports",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.526Z"
+    },
+    {
+      "test": "separator.jsx - Styling utilities",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.526Z"
+    },
+    {
+      "test": "InteractiveDemo.jsx - State management",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.527Z"
+    },
+    {
+      "test": "InteractiveDemo.jsx - Event handlers",
+      "status": "PASS",
+      "details": "5 event handlers found",
+      "timestamp": "2025-09-30T15:42:54.527Z"
+    },
+    {
+      "test": "StatsSection.jsx - State management",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.527Z"
+    },
+    {
+      "test": "StatsSection.jsx - Event handlers",
+      "status": "FAIL",
+      "details": "No event handlers found",
+      "timestamp": "2025-09-30T15:42:54.527Z"
+    },
+    {
+      "test": "Navbar.jsx - State management",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.527Z"
+    },
+    {
+      "test": "Navbar.jsx - Event handlers",
+      "status": "PASS",
+      "details": "5 event handlers found",
+      "timestamp": "2025-09-30T15:42:54.527Z"
+    },
+    {
+      "test": "Footer.jsx - State management",
+      "status": "FAIL",
+      "details": "Missing state management hooks",
+      "timestamp": "2025-09-30T15:42:54.527Z"
+    },
+    {
+      "test": "Footer.jsx - Event handlers",
+      "status": "FAIL",
+      "details": "No event handlers found",
+      "timestamp": "2025-09-30T15:42:54.527Z"
+    }
+  ],
+  "backend": [
+    {
+      "test": "index.ts - Express integration",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.527Z"
+    },
+    {
+      "test": "index.ts - Error handling",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.527Z"
+    },
+    {
+      "test": "stripe.ts - Express integration",
+      "status": "FAIL",
+      "details": "Missing Express route definitions",
+      "timestamp": "2025-09-30T15:42:54.527Z"
+    },
+    {
+      "test": "stripe.ts - Error handling",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.527Z"
+    },
+    {
+      "test": "billing.ts - Express integration",
+      "status": "FAIL",
+      "details": "Missing Express route definitions",
+      "timestamp": "2025-09-30T15:42:54.528Z"
+    },
+    {
+      "test": "billing.ts - Error handling",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.528Z"
+    },
+    {
+      "test": "analytics.ts - Express integration",
+      "status": "FAIL",
+      "details": "Missing Express route definitions",
+      "timestamp": "2025-09-30T15:42:54.528Z"
+    },
+    {
+      "test": "analytics.ts - Error handling",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.528Z"
+    },
+    {
+      "test": "billing.ts - Express integration",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.528Z"
+    },
+    {
+      "test": "billing.ts - Error handling",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.528Z"
+    },
+    {
+      "test": "analytics.ts - Express integration",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.528Z"
+    },
+    {
+      "test": "analytics.ts - Error handling",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.528Z"
+    },
+    {
+      "test": "Database model - User",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.528Z"
+    },
+    {
+      "test": "Database model - Project",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.528Z"
+    },
+    {
+      "test": "Database model - Clip",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.528Z"
+    },
+    {
+      "test": "Database model - Subscription",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.528Z"
+    },
+    {
+      "test": "Database model - Usage",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.528Z"
+    },
+    {
+      "test": "Database model - Analytics",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.528Z"
+    },
+    {
+      "test": "Database relationships",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.528Z"
+    },
+    {
+      "test": "Frontend dependencies",
+      "status": "PASS",
+      "details": "59 dependencies found",
+      "timestamp": "2025-09-30T15:42:54.528Z"
+    },
+    {
+      "test": "Backend dependencies",
+      "status": "PASS",
+      "details": "33 dependencies found",
+      "timestamp": "2025-09-30T15:42:54.528Z"
+    },
+    {
+      "test": "AI Service dependencies",
+      "status": "PASS",
+      "details": "27 Python packages found",
+      "timestamp": "2025-09-30T15:42:54.529Z"
+    },
+    {
+      "test": "Build config - vite.config.js",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.529Z"
+    },
+    {
+      "test": "Build config - tsconfig.json",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.529Z"
+    },
+    {
+      "test": "Build config - docker-compose.yml",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.529Z"
+    },
+    {
+      "test": "Build config - deploy.yml",
+      "status": "PASS",
+      "details": "",
+      "timestamp": "2025-09-30T15:42:54.529Z"
+    },
+    {
+      "test": "Environment config - .env.example",
+      "status": "PASS",
+      "details": "25 environment variables",
+      "timestamp": "2025-09-30T15:42:54.529Z"
+    },
+    {
+      "test": "Environment config - .env.development",
+      "status": "PASS",
+      "details": "19 environment variables",
+      "timestamp": "2025-09-30T15:42:54.529Z"
+    }
+  ]
+}

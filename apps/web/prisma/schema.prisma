@@ -1,0 +1,288 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String
+  role      UserRole @default(USER)
+  credits   Int      @default(100)
+  planType  PlanType @default(FREE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  accounts Account[]
+  projects Project[]
+
+  @@map("users")
+}
+
+model Account {
+  id      String      @id @default(cuid())
+  ownerId String      @map("owner_user_id")
+  plan    PlanType    @default(STARTER)
+  status  PlanStatus  @default(ACTIVE)
+  
+  owner   User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  
+  presets       Preset[]
+  subscriptions Subscription[]
+  usage         Usage[]
+  auditLogs     AuditLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("accounts")
+}
+
+model Project {
+  id               String    @id @default(cuid())
+  userId           String    @map("user_id")
+  title            String
+  description      String?
+  status           ProjectStatus @default(PROCESSING)
+  originalVideoUrl String?   @map("original_video_url")
+  duration         Float?
+  fileSize         Int?      @map("file_size")
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  uploads Upload[]
+  clips   Clip[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("projects")
+}
+
+model Upload {
+  id         String     @id @default(cuid())
+  projectId  String     @map("project_id")
+  sourceType SourceType @map("source_type")
+  storageKey String     @map("storage_key")
+  durationS  Int?       @map("duration_s")
+  status     JobStatus  @default(PENDING)
+  
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  transcripts Transcript[]
+  segments    Segment[]
+  renders     Render[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("uploads")
+}
+
+model Clip {
+  id          String      @id @default(cuid())
+  projectId   String      @map("project_id")
+  title       String
+  description String?
+  videoUrl    String?     @map("video_url")
+  thumbnailUrl String?    @map("thumbnail_url")
+  duration    Float
+  viralScore  Float       @map("viral_score")
+  status      ClipStatus  @default(PROCESSING)
+  startTime   Float       @map("start_time")
+  endTime     Float       @map("end_time")
+  
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  analytics Analytics[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("clips")
+}
+
+model Analytics {
+  id        String   @id @default(cuid())
+  clipId    String   @map("clip_id")
+  platform  String
+  views     Int      @default(0)
+  likes     Int      @default(0)
+  shares    Int      @default(0)
+  comments  Int      @default(0)
+  engagement Float   @default(0)
+  
+  clip Clip @relation(fields: [clipId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("analytics")
+}
+
+model Transcript {
+  id           String  @id @default(cuid())
+  uploadId     String  @map("upload_id")
+  language     String
+  srtKey       String  @map("srt_key")
+  wordsJsonKey String  @map("words_json_key")
+  confidence   Float?
+  
+  upload Upload @relation(fields: [uploadId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("transcripts")
+}
+
+model Segment {
+  id       String @id @default(cuid())
+  uploadId String @map("upload_id")
+  startS   Float  @map("start_s")
+  endS     Float  @map("end_s")
+  score    Float
+  reasonJson Json @map("reason_json")
+  
+  upload Upload @relation(fields: [uploadId], references: [id], onDelete: Cascade)
+  
+  renders Render[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("segments")
+}
+
+model Render {
+  id        String    @id @default(cuid())
+  uploadId  String    @map("upload_id")
+  segmentId String    @map("segment_id")
+  presetId  String    @map("preset_id")
+  status    JobStatus @default(PENDING)
+  mp4Key    String?   @map("mp4_key")
+  srtKey    String?   @map("srt_key")
+  durationS Float?    @map("duration_s")
+  
+  upload  Upload  @relation(fields: [uploadId], references: [id], onDelete: Cascade)
+  segment Segment @relation(fields: [segmentId], references: [id], onDelete: Cascade)
+  preset  Preset  @relation(fields: [presetId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("renders")
+}
+
+model Preset {
+  id         String @id @default(cuid())
+  accountId  String @map("account_id")
+  name       String
+  colors     Json
+  font       String
+  frameStyle Json   @map("frame_style")
+  
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  
+  renders Render[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("presets")
+}
+
+model Subscription {
+  accountId String     @map("account_id") @id
+  plan      PlanType
+  renewsAt  DateTime   @map("renews_at")
+  status    PlanStatus
+  stripeSubscriptionId String? @map("stripe_subscription_id")
+  
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("subscriptions")
+}
+
+model Usage {
+  id               String @id @default(cuid())
+  accountId        String @map("account_id")
+  month            String // Format: YYYY-MM
+  clipsRendered    Int    @default(0) @map("clips_rendered")
+  minutesProcessed Int    @default(0) @map("minutes_processed")
+  
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([accountId, month])
+  @@map("usage")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  accountId String   @map("account_id")
+  event     String
+  payload   Json
+  
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@map("audit_logs")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum PlanType {
+  FREE
+  STARTER
+  PRO
+  BUSINESS
+}
+
+enum PlanStatus {
+  ACTIVE
+  CANCELLED
+  PAST_DUE
+  UNPAID
+}
+
+enum ProjectStatus {
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum ClipStatus {
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum SourceType {
+  FILE
+  YOUTUBE
+}
+
+enum JobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
