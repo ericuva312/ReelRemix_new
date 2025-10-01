@@ -1,4 +1,4 @@
-const http = require('http');
+const http = require('http' );
 const url = require('url');
 
 // Simple in-memory storage
@@ -31,7 +31,9 @@ function parseBody(req, callback) {
   });
 }
 
-const server = http.createServer((req, res) => {
+const server = http.createServer((req, res ) => {
+  console.log(`${new Date().toISOString()} ${req.method} ${req.url}`);
+  
   const { pathname } = url.parse(req.url);
   
   // Handle CORS
@@ -43,13 +45,23 @@ const server = http.createServer((req, res) => {
 
   // Health check
   if (pathname === '/health') {
-    sendJSON(res, 200, { success: true, message: 'Server healthy' });
+    sendJSON(res, 200, { 
+      success: true, 
+      message: 'Server healthy',
+      timestamp: new Date().toISOString(),
+      port: process.env.PORT || 3000
+    });
     return;
   }
 
   // Root
   if (pathname === '/') {
-    sendJSON(res, 200, { success: true, message: 'ReelRemix API' });
+    sendJSON(res, 200, { 
+      success: true, 
+      message: 'ReelRemix API',
+      version: '1.0.0',
+      endpoints: ['/health', '/api/auth/signup', '/api/auth/signin', '/api/dashboard/overview']
+    });
     return;
   }
 
@@ -72,7 +84,15 @@ const server = http.createServer((req, res) => {
 
       const userId = generateId();
       const token = generateToken();
-      const user = { id: userId, name, email, credits: 100, plan: 'starter', createdAt: new Date().toISOString(), token };
+      const user = { 
+        id: userId, 
+        name, 
+        email, 
+        credits: 100, 
+        plan: 'starter', 
+        createdAt: new Date().toISOString(), 
+        token 
+      };
       
       users.set(userId, user);
       
@@ -80,7 +100,14 @@ const server = http.createServer((req, res) => {
         success: true,
         message: 'User created',
         data: {
-          user: { id: user.id, name: user.name, email: user.email, credits: user.credits, plan: user.plan, createdAt: user.createdAt },
+          user: { 
+            id: user.id, 
+            name: user.name, 
+            email: user.email, 
+            credits: user.credits, 
+            plan: user.plan, 
+            createdAt: user.createdAt 
+          },
           token: user.token
         }
       });
@@ -114,7 +141,14 @@ const server = http.createServer((req, res) => {
         success: true,
         message: 'Signed in',
         data: {
-          user: { id: user.id, name: user.name, email: user.email, credits: user.credits, plan: user.plan, createdAt: user.createdAt },
+          user: { 
+            id: user.id, 
+            name: user.name, 
+            email: user.email, 
+            credits: user.credits, 
+            plan: user.plan, 
+            createdAt: user.createdAt 
+          },
           token: user.token
         }
       });
@@ -163,7 +197,32 @@ const server = http.createServer((req, res) => {
   sendJSON(res, 404, { success: false, message: 'Not found' });
 });
 
+// Use Railway's provided port or fallback to 3000
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
+const HOST = '0.0.0.0';
+
+server.listen(PORT, HOST, () => {
+  console.log(`🚀 ReelRemix server running on ${HOST}:${PORT}`);
+  console.log(`📅 Started at: ${new Date().toISOString()}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received, shutting down gracefully');
+  server.close(() => {
+    console.log('Server closed');
+    process.exit(0);
+  });
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  process.exit(1);
 });
