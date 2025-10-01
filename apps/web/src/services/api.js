@@ -1,10 +1,10 @@
-// API service for ReelRemix frontend
+// API service for ReelRemix frontend with AI processing
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? (import.meta.env.VITE_API_URL || 'https://reelremix-new.onrender.com' )
+  ? 'https://reelremix-new.onrender.com'
   : 'http://localhost:3000';
 
 class ApiService {
-  constructor( ) {
+  constructor() {
     this.baseURL = API_BASE_URL;
     this.token = localStorage.getItem('authToken');
   }
@@ -73,6 +73,50 @@ class ApiService {
 
   async getDashboardOverview() {
     return await this.request('/api/dashboard/overview');
+  }
+
+  // New AI processing endpoints
+  async uploadVideo(fileName, fileSize) {
+    return await this.request('/api/projects/upload', {
+      method: 'POST',
+      body: JSON.stringify({ fileName, fileSize }),
+    });
+  }
+
+  async getProjects() {
+    return await this.request('/api/projects');
+  }
+
+  async getProject(projectId) {
+    return await this.request(`/api/projects/${projectId}`);
+  }
+
+  async getProjectClips(projectId) {
+    return await this.request(`/api/projects/${projectId}/clips`);
+  }
+
+  async deleteProject(projectId) {
+    return await this.request(`/api/projects/${projectId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async downloadClip(clipId) {
+    const response = await fetch(`${this.baseURL}/api/clips/${clipId}/download`, {
+      headers: {
+        ...(this.token && { Authorization: `Bearer ${this.token}` }),
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Download failed');
+    }
+
+    return response.blob();
+  }
+
+  async getClipThumbnail(clipId) {
+    return `${this.baseURL}/api/clips/${clipId}/thumbnail`;
   }
 
   async healthCheck() {
