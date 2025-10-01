@@ -20,7 +20,8 @@ function App() {
               </ProtectedRoute>
             } 
           />
-          {/* Add more routes as needed */}
+          {/* Catch all route - redirect to home */}
+          <Route path="*" element={<Home />} />
         </Routes>
       </div>
     </Router>
