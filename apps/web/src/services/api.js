@@ -1,6 +1,6 @@
 // API service for ReelRemix frontend
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://reelremix-new.onrender.com'
+  ? (import.meta.env.VITE_API_URL || 'https://reelremix-new.onrender.com' )
   : 'http://localhost:3000';
 
 class ApiService {
