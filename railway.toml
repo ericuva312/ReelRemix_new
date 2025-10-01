@@ -1,13 +1,14 @@
 [build]
-builder = "NIXPACKS"
+builder = "dockerfile"
+dockerfilePath = "apps/worker/Dockerfile"
 
 [deploy]
-startCommand = "npm start"
+startCommand = "node server.js"
 healthcheckPath = "/health"
 healthcheckTimeout = 300
-restartPolicyType = "ON_FAILURE"
+restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 10
 
-[services.variables]
+[env]
 NODE_ENV = "production"
 PORT = "3000"
