@@ -6,17 +6,39 @@ const Dashboard = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentView, setCurrentView] = useState('dashboard');
+  const [projects, setProjects] = useState([]);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     const loadDashboard = async () => {
       try {
-        // Get user from localStorage
         const userData = ApiService.getCurrentUser();
         setUser(userData);
 
-        // Get dashboard stats from API
         const response = await ApiService.getDashboardOverview();
         setStats(response.data);
+        
+        // Mock projects data for now
+        setProjects([
+          {
+            id: 1,
+            name: "Marketing Video Q4",
+            status: "completed",
+            clips: 5,
+            duration: "15:30",
+            created: "2024-01-15"
+          },
+          {
+            id: 2,
+            name: "Product Demo",
+            status: "processing",
+            clips: 0,
+            duration: "8:45",
+            created: "2024-01-14"
+          }
+        ]);
       } catch (err) {
         setError(err.message);
         console.error('Dashboard load error:', err);
@@ -33,12 +55,84 @@ const Dashboard = () => {
     window.location.href = '/';
   };
 
+  const handleUploadVideo = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'video/*';
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        setIsUploading(true);
+        setUploadProgress(0);
+        
+        // Simulate upload progress
+        const interval = setInterval(() => {
+          setUploadProgress(prev => {
+            if (prev >= 100) {
+              clearInterval(interval);
+              setIsUploading(false);
+              alert(`Video "${file.name}" uploaded successfully! Processing will begin shortly.`);
+              return 100;
+            }
+            return prev + 10;
+          });
+        }, 200);
+      }
+    };
+    input.click();
+  };
+
+  const handleViewProjects = () => {
+    setCurrentView('projects');
+  };
+
+  const handleGenerateClips = () => {
+    if (projects.length === 0) {
+      alert('Please upload a video first to generate clips.');
+      return;
+    }
+    
+    const projectToProcess = projects.find(p => p.status === 'completed');
+    if (!projectToProcess) {
+      alert('No completed projects available for clip generation. Please wait for your video to finish processing.');
+      return;
+    }
+    
+    alert(`Generating clips for "${projectToProcess.name}"... This may take a few minutes.`);
+    // Here you would integrate with your actual clip generation API
+  };
+
+  const handleBackToDashboard = () => {
+    setCurrentView('dashboard');
+  };
+
+  const handleDeleteProject = (projectId) => {
+    if (confirm('Are you sure you want to delete this project?')) {
+      setProjects(projects.filter(p => p.id !== projectId));
+      alert('Project deleted successfully.');
+    }
+  };
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading dashboard...</p>
+      <div style={{ 
+        minHeight: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        backgroundColor: '#f9fafb'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ 
+            width: '48px', 
+            height: '48px', 
+            border: '3px solid #e5e7eb',
+            borderTop: '3px solid #7c3aed',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto'
+          }}></div>
+          <p style={{ marginTop: '16px', color: '#6b7280' }}>Loading dashboard...</p>
         </div>
       </div>
     );
@@ -46,13 +140,28 @@ const Dashboard = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-red-600 mb-4">Error Loading Dashboard</h2>
-          <p className="text-gray-600 mb-4">{error}</p>
+      <div style={{ 
+        minHeight: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        backgroundColor: '#f9fafb'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: '#dc2626', marginBottom: '16px' }}>
+            Error Loading Dashboard
+          </h2>
+          <p style={{ color: '#6b7280', marginBottom: '16px' }}>{error}</p>
           <button 
             onClick={() => window.location.reload()} 
-            className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+            style={{
+              backgroundColor: '#7c3aed',
+              color: 'white',
+              padding: '8px 16px',
+              borderRadius: '4px',
+              border: 'none',
+              cursor: 'pointer'
+            }}
           >
             Retry
           </button>
@@ -62,19 +171,31 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb' }}>
       {/* Header */}
-      <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex items-center">
-              <h1 className="text-3xl font-bold text-gray-900">ReelRemix Dashboard</h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-gray-700">Welcome, {user?.name}</span>
+      <header style={{ backgroundColor: 'white', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 16px' }}>
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center', 
+            padding: '24px 0' 
+          }}>
+            <h1 style={{ fontSize: '30px', fontWeight: 'bold', color: '#111827', margin: 0 }}>
+              ReelRemix Dashboard
+            </h1>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <span style={{ color: '#374151' }}>Welcome, {user?.name}</span>
               <button 
                 onClick={handleSignOut}
-                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+                style={{
+                  backgroundColor: '#dc2626',
+                  color: 'white',
+                  padding: '8px 16px',
+                  borderRadius: '4px',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
               >
                 Sign Out
               </button>
@@ -83,124 +204,272 @@ const Dashboard = () => {
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white overflow-hidden shadow rounded-lg">
-              <div className="p-5">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
-                      <span className="text-white font-bold">P</span>
-                    </div>
-                  </div>
-                  <div className="ml-5 w-0 flex-1">
-                    <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">Total Projects</dt>
-                      <dd className="text-lg font-medium text-gray-900">{stats?.totalProjects || 0}</dd>
-                    </dl>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white overflow-hidden shadow rounded-lg">
-              <div className="p-5">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
-                      <span className="text-white font-bold">C</span>
-                    </div>
-                  </div>
-                  <div className="ml-5 w-0 flex-1">
-                    <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">Total Clips</dt>
-                      <dd className="text-lg font-medium text-gray-900">{stats?.totalClips || 0}</dd>
-                    </dl>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white overflow-hidden shadow rounded-lg">
-              <div className="p-5">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                      <span className="text-white font-bold">$</span>
-                    </div>
-                  </div>
-                  <div className="ml-5 w-0 flex-1">
-                    <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">Credits Remaining</dt>
-                      <dd className="text-lg font-medium text-gray-900">{stats?.creditsRemaining || user?.credits || 0}</dd>
-                    </dl>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white overflow-hidden shadow rounded-lg">
-              <div className="p-5">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <div className="w-8 h-8 bg-yellow-600 rounded-full flex items-center justify-center">
-                      <span className="text-white font-bold">⭐</span>
-                    </div>
-                  </div>
-                  <div className="ml-5 w-0 flex-1">
-                    <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">Plan</dt>
-                      <dd className="text-lg font-medium text-gray-900 capitalize">{stats?.plan || user?.plan || 'Starter'}</dd>
-                    </dl>
-                  </div>
-                </div>
-              </div>
-            </div>
+      {/* Upload Progress */}
+      {isUploading && (
+        <div style={{ backgroundColor: '#fef3c7', padding: '12px 16px', textAlign: 'center' }}>
+          <p style={{ margin: '0 0 8px 0', color: '#92400e' }}>Uploading video... {uploadProgress}%</p>
+          <div style={{ backgroundColor: '#fbbf24', height: '4px', borderRadius: '2px', overflow: 'hidden' }}>
+            <div 
+              style={{ 
+                backgroundColor: '#f59e0b', 
+                height: '100%', 
+                width: `${uploadProgress}%`,
+                transition: 'width 0.3s ease'
+              }}
+            ></div>
           </div>
+        </div>
+      )}
 
-          {/* Quick Actions */}
-          <div className="bg-white shadow rounded-lg">
-            <div className="px-4 py-5 sm:p-6">
-              <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">Quick Actions</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <button className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors">
+      {/* Main Content */}
+      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px 16px' }}>
+        {currentView === 'dashboard' && (
+          <>
+            {/* Stats Cards */}
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+              gap: '24px', 
+              marginBottom: '32px' 
+            }}>
+              <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+                <h3 style={{ color: '#6b7280', fontSize: '14px', margin: '0 0 8px 0' }}>Total Projects</h3>
+                <p style={{ fontSize: '24px', fontWeight: 'bold', color: '#111827', margin: 0 }}>
+                  {projects.length}
+                </p>
+              </div>
+
+              <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+                <h3 style={{ color: '#6b7280', fontSize: '14px', margin: '0 0 8px 0' }}>Total Clips</h3>
+                <p style={{ fontSize: '24px', fontWeight: 'bold', color: '#111827', margin: 0 }}>
+                  {projects.reduce((total, project) => total + project.clips, 0)}
+                </p>
+              </div>
+
+              <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+                <h3 style={{ color: '#6b7280', fontSize: '14px', margin: '0 0 8px 0' }}>Credits Remaining</h3>
+                <p style={{ fontSize: '24px', fontWeight: 'bold', color: '#111827', margin: 0 }}>
+                  {stats?.creditsRemaining || user?.credits || 100}
+                </p>
+              </div>
+
+              <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+                <h3 style={{ color: '#6b7280', fontSize: '14px', margin: '0 0 8px 0' }}>Plan</h3>
+                <p style={{ fontSize: '24px', fontWeight: 'bold', color: '#111827', margin: 0, textTransform: 'capitalize' }}>
+                  {stats?.plan || user?.plan || 'Starter'}
+                </p>
+              </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div style={{ backgroundColor: 'white', padding: '24px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', marginBottom: '32px' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#111827', marginBottom: '16px' }}>Quick Actions</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+                <button 
+                  onClick={handleUploadVideo}
+                  style={{
+                    backgroundColor: '#7c3aed',
+                    color: 'white',
+                    padding: '12px 24px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontSize: '16px',
+                    transition: 'background-color 0.2s'
+                  }}
+                  onMouseOver={(e) => e.target.style.backgroundColor = '#6d28d9'}
+                  onMouseOut={(e) => e.target.style.backgroundColor = '#7c3aed'}
+                >
                   Upload New Video
                 </button>
-                <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                <button 
+                  onClick={handleViewProjects}
+                  style={{
+                    backgroundColor: '#2563eb',
+                    color: 'white',
+                    padding: '12px 24px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontSize: '16px',
+                    transition: 'background-color 0.2s'
+                  }}
+                  onMouseOver={(e) => e.target.style.backgroundColor = '#1d4ed8'}
+                  onMouseOut={(e) => e.target.style.backgroundColor = '#2563eb'}
+                >
                   View Projects
                 </button>
-                <button className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors">
+                <button 
+                  onClick={handleGenerateClips}
+                  style={{
+                    backgroundColor: '#059669',
+                    color: 'white',
+                    padding: '12px 24px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontSize: '16px',
+                    transition: 'background-color 0.2s'
+                  }}
+                  onMouseOver={(e) => e.target.style.backgroundColor = '#047857'}
+                  onMouseOut={(e) => e.target.style.backgroundColor = '#059669'}
+                >
                   Generate Clips
                 </button>
               </div>
             </div>
-          </div>
 
-          {/* Recent Projects */}
-          <div className="mt-8 bg-white shadow rounded-lg">
-            <div className="px-4 py-5 sm:p-6">
-              <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">Recent Projects</h3>
-              {stats?.recentProjects?.length > 0 ? (
-                <div className="space-y-4">
-                  {stats.recentProjects.map((project, index) => (
-                    <div key={index} className="border-l-4 border-purple-600 pl-4">
-                      <h4 className="font-medium">{project.name}</h4>
-                      <p className="text-sm text-gray-600">{project.description}</p>
+            {/* Recent Projects */}
+            <div style={{ backgroundColor: 'white', padding: '24px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#111827', marginBottom: '16px' }}>Recent Projects</h3>
+              {projects.length > 0 ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  {projects.slice(0, 3).map((project) => (
+                    <div key={project.id} style={{ borderLeft: '4px solid #7c3aed', paddingLeft: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div>
+                        <h4 style={{ fontWeight: '500', margin: '0 0 4px 0' }}>{project.name}</h4>
+                        <p style={{ fontSize: '14px', color: '#6b7280', margin: 0 }}>
+                          {project.clips} clips • {project.duration} • {project.status}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => handleDeleteProject(project.id)}
+                        style={{
+                          backgroundColor: '#dc2626',
+                          color: 'white',
+                          padding: '4px 8px',
+                          borderRadius: '4px',
+                          border: 'none',
+                          cursor: 'pointer',
+                          fontSize: '12px'
+                        }}
+                      >
+                        Delete
+                      </button>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-8">
-                  <p className="text-gray-500">No projects yet. Create your first project to get started!</p>
+                <div style={{ textAlign: 'center', padding: '32px 0' }}>
+                  <p style={{ color: '#6b7280' }}>No projects yet. Create your first project to get started!</p>
                 </div>
               )}
             </div>
+          </>
+        )}
+
+        {currentView === 'projects' && (
+          <div style={{ backgroundColor: 'white', padding: '24px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#111827', margin: 0 }}>All Projects</h3>
+              <button
+                onClick={handleBackToDashboard}
+                style={{
+                  backgroundColor: '#6b7280',
+                  color: 'white',
+                  padding: '8px 16px',
+                  borderRadius: '4px',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                Back to Dashboard
+              </button>
+            </div>
+            
+            {projects.length > 0 ? (
+              <div style={{ display: 'grid', gap: '16px' }}>
+                {projects.map((project) => (
+                  <div key={project.id} style={{ 
+                    border: '1px solid #e5e7eb', 
+                    borderRadius: '8px', 
+                    padding: '16px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}>
+                    <div>
+                      <h4 style={{ fontWeight: '600', margin: '0 0 8px 0' }}>{project.name}</h4>
+                      <p style={{ fontSize: '14px', color: '#6b7280', margin: '0 0 4px 0' }}>
+                        Duration: {project.duration} • Created: {project.created}
+                      </p>
+                      <p style={{ fontSize: '14px', margin: 0 }}>
+                        <span style={{ 
+                          backgroundColor: project.status === 'completed' ? '#10b981' : '#f59e0b',
+                          color: 'white',
+                          padding: '2px 8px',
+                          borderRadius: '12px',
+                          fontSize: '12px'
+                        }}>
+                          {project.status}
+                        </span>
+                        {project.clips > 0 && <span style={{ marginLeft: '8px', color: '#6b7280' }}>{project.clips} clips generated</span>}
+                      </p>
+                    </div>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      {project.status === 'completed' && (
+                        <button
+                          onClick={() => alert(`Viewing clips for ${project.name}`)}
+                          style={{
+                            backgroundColor: '#2563eb',
+                            color: 'white',
+                            padding: '6px 12px',
+                            borderRadius: '4px',
+                            border: 'none',
+                            cursor: 'pointer',
+                            fontSize: '14px'
+                          }}
+                        >
+                          View Clips
+                        </button>
+                      )}
+                      <button
+                        onClick={() => handleDeleteProject(project.id)}
+                        style={{
+                          backgroundColor: '#dc2626',
+                          color: 'white',
+                          padding: '6px 12px',
+                          borderRadius: '4px',
+                          border: 'none',
+                          cursor: 'pointer',
+                          fontSize: '14px'
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div style={{ textAlign: 'center', padding: '48px 0' }}>
+                <p style={{ color: '#6b7280', marginBottom: '16px' }}>No projects found.</p>
+                <button
+                  onClick={handleUploadVideo}
+                  style={{
+                    backgroundColor: '#7c3aed',
+                    color: 'white',
+                    padding: '12px 24px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontSize: '16px'
+                  }}
+                >
+                  Upload Your First Video
+                </button>
+              </div>
+            )}
           </div>
-        </div>
+        )}
       </main>
+
+      <style>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 };
